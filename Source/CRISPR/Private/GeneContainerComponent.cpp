@@ -44,7 +44,11 @@ void UGeneContainerComponent::AddGene(const UGeneDataAsset* GeneData)
 
 	const UClass* geneClass = activeGene ? activeGene : passiveGene;
 
-	Genes.Add(NewObject<UGene>(this, geneClass));
+	auto* gene = NewObject<UGene>(this, geneClass);
+	gene->DataAsset = GeneData;
+	gene->Character = GetOwner();
+	Genes.Add(gene);
+	gene->OnAdded();
 }
 
 void UGeneContainerComponent::ActivateAllGenes()

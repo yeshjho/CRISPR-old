@@ -8,6 +8,7 @@
 
 
 class UGeneDataAsset;
+class UGene;
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class CRISPR_API UGeneContainerComponent : public UActorComponent
 {
@@ -25,8 +26,14 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	UFUNCTION(BlueprintCallable)
+	void AddGene(const UGeneDataAsset* GeneData);
+
+	// Temporary for testing
+	UFUNCTION(BlueprintCallable)
+	void ActivateAllGenes();
 
 private:
 	UPROPERTY(VisibleInstanceOnly)
-	TArray<UGeneDataAsset*> Genes;
+	TArray<UGene*> Genes;
 };

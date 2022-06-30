@@ -6,6 +6,8 @@
 #include "Engine/DataAsset.h"
 #include "GeneDataAsset.generated.h"
 
+class UPassiveGene;
+class UActiveGene;
 /**
  * 
  */
@@ -26,7 +28,8 @@ public:
 	int SlotCount = 1;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	bool IsPassive = false;
+	TSubclassOf<UActiveGene> ActiveGeneImpl;
 
-
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TSubclassOf<UPassiveGene> PassiveGeneImpl;
 };

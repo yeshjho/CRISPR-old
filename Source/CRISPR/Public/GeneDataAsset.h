@@ -11,7 +11,7 @@ class UActiveGene;
 /**
  * 
  */
-UCLASS()
+UCLASS(BlueprintType)
 class CRISPR_API UGeneDataAsset final : public UDataAsset
 {
 	GENERATED_BODY()
@@ -23,6 +23,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
     FText Description;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UTexture2D* Icon;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	int SlotCount = 1;

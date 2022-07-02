@@ -4,6 +4,8 @@
 #include "GeneContainerComponent.h"
 
 #include "ActiveGene.h"
+#include "CharacterBase.h"
+#include "GeneContainerWidgetBase.h"
 #include "GeneDataAsset.h"
 #include "PassiveGene.h"
 
@@ -22,6 +24,8 @@ UGeneContainerComponent::UGeneContainerComponent()
 void UGeneContainerComponent::BeginPlay()
 {
 	Super::BeginPlay();
+
+	Character = dynamic_cast<ACharacterBase*>(GetOwner());
 
 	// ...
 	
@@ -48,9 +52,11 @@ void UGeneContainerComponent::AddGene(const UGeneDataAsset* GeneData)
 
 	auto* gene = NewObject<UGene>(this, geneClass);
 	gene->DataAsset = GeneData;
-	gene->Character = GetOwner();
+	gene->Character = Character;
 	Genes.Emplace(SlotSize - GeneData->SlotCount, GeneData->SlotCount, gene);
 	gene->OnAdded();
+
+	Character->ContainerWidget->SetGenes(Genes);
 }
 
 void UGeneContainerComponent::ActivateAllGenes()
@@ -67,8 +73,16 @@ void UGeneContainerComponent::ActivateAllGenes()
 
 void UGeneContainerComponent::SetSlotSize(int size)
 {
+	if (SlotSize == size)
+	{
+		return;
+	}
+
 	SlotSize = size;
 	PushAndTruncateGenes(SlotSize);
+
+	Character->ContainerWidget->SetSlotCount(SlotSize);
+	Character->ContainerWidget->SetGenes(Genes);
 }
 
 void UGeneContainerComponent::PushAndTruncateGenes(int lastGeneStartSlotIndex)

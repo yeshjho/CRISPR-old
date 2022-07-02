@@ -7,11 +7,12 @@
 #include "GeneContainerComponent.generated.h"
 
 
+class ACharacterBase;
 class UGeneDataAsset;
 class UGene;
 
 
-USTRUCT()
+USTRUCT(BlueprintType)
 struct FGeneInfo
 {
 	GENERATED_BODY()
@@ -20,9 +21,13 @@ struct FGeneInfo
 	    : StartSlotIndex(startSlotIndex), SlotSize(slotSize), Gene(gene)
 	{}
 
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
 	int StartSlotIndex;
-	unsigned int SlotSize;
-	UPROPERTY()
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	int SlotSize;
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
 	UGene* Gene;
 };
 
@@ -51,9 +56,6 @@ public:
 	void ActivateAllGenes();
 
 	UFUNCTION(BlueprintCallable)
-	int GetSlotSize() const { return SlotSize; }
-
-	UFUNCTION(BlueprintCallable)
 	void SetSlotSize(int size);
 
 private:
@@ -64,6 +66,9 @@ public:
 	UPROPERTY(VisibleInstanceOnly)
 	TArray<FGeneInfo> Genes;
 
-private:
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
 	int SlotSize = 3;
+
+	UPROPERTY(BlueprintReadOnly)
+	ACharacterBase* Character;
 };

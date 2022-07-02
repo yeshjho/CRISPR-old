@@ -16,6 +16,6 @@ class CRISPR_API UActiveGene : public UGene
 
 
 public:
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void OnActivate();
 };

@@ -6,11 +6,12 @@
 #include "UObject/NoExportTypes.h"
 #include "Gene.generated.h"
 
+class ACharacterBase;
 class UGeneDataAsset;
 /**
  * 
  */
-UCLASS(Abstract)
+UCLASS(Abstract, BlueprintType)
 class CRISPR_API UGene : public UObject
 {
 	GENERATED_BODY()
@@ -28,8 +29,8 @@ public:
 
 public:
 	UPROPERTY(BlueprintReadOnly)
-	AActor* Character;
+	ACharacterBase* Character;
 
-private:
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
 	const UGeneDataAsset* DataAsset;
 };

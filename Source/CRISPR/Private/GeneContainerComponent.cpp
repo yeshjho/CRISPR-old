@@ -44,21 +44,55 @@ void UGeneContainerComponent::AddGene(const UGeneDataAsset* GeneData)
 
 	const UClass* geneClass = activeGene ? activeGene : passiveGene;
 
+	PushAndTruncateGenes(SlotSize - GeneData->SlotCount);
+
 	auto* gene = NewObject<UGene>(this, geneClass);
 	gene->DataAsset = GeneData;
 	gene->Character = GetOwner();
-	Genes.Add(gene);
+	Genes.Emplace(SlotSize - GeneData->SlotCount, GeneData->SlotCount, gene);
 	gene->OnAdded();
 }
 
 void UGeneContainerComponent::ActivateAllGenes()
 {
-    for (UGene* gene : Genes)
+    for (const auto& info : Genes)
     {
+		UGene* gene = info.Gene;
         if (auto* activeGene = dynamic_cast<UActiveGene*>(gene))
         {
 			activeGene->OnActivate();
         }
     }
+}
+
+void UGeneContainerComponent::SetSlotSize(int size)
+{
+	SlotSize = size;
+	PushAndTruncateGenes(SlotSize);
+}
+
+void UGeneContainerComponent::PushAndTruncateGenes(int lastGeneStartSlotIndex)
+{
+	for (int i = Genes.Num() - 1; i >= 0; i--)
+	{
+		auto& info = Genes[i];
+		const int thisGeneEndSlotIndex = info.StartSlotIndex + info.SlotSize - 1;
+		const int overlapSize = thisGeneEndSlotIndex - lastGeneStartSlotIndex + 1;
+		if (overlapSize <= 0)
+		{
+			break;
+		}
+		info.StartSlotIndex -= overlapSize;
+		if (info.StartSlotIndex < 0)
+		{
+			for (int j = 0; j <= i; j++)
+			{
+				Genes[j].Gene->OnRemoved();
+			}
+			Genes.RemoveAt(0, i + 1);
+			break;
+		}
+		lastGeneStartSlotIndex = info.StartSlotIndex;
+	}
 }
 

@@ -9,6 +9,23 @@
 
 class UGeneDataAsset;
 class UGene;
+
+
+USTRUCT()
+struct FGeneInfo
+{
+	GENERATED_BODY()
+	FGeneInfo() = default;
+	FGeneInfo(int startSlotIndex, unsigned int slotSize, UGene* gene)
+	    : StartSlotIndex(startSlotIndex), SlotSize(slotSize), Gene(gene)
+	{}
+
+	int StartSlotIndex;
+	unsigned int SlotSize;
+	UPROPERTY()
+	UGene* Gene;
+};
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class CRISPR_API UGeneContainerComponent : public UActorComponent
 {
@@ -33,7 +50,20 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void ActivateAllGenes();
 
+	UFUNCTION(BlueprintCallable)
+	int GetSlotSize() const { return SlotSize; }
+
+	UFUNCTION(BlueprintCallable)
+	void SetSlotSize(int size);
+
 private:
+	void PushAndTruncateGenes(int lastGeneStartSlotIndex);
+
+
+public:
 	UPROPERTY(VisibleInstanceOnly)
-	TArray<UGene*> Genes;
+	TArray<FGeneInfo> Genes;
+
+private:
+	int SlotSize = 3;
 };

@@ -56,7 +56,7 @@ public:
 	void ActivateAllGenes();
 
 	UFUNCTION(BlueprintCallable)
-	void SetSlotSize(int size);
+	void SetSlotSize(int Size);
 
 private:
 	void PushAndTruncateGenes(int lastGeneStartSlotIndex);

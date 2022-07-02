@@ -71,14 +71,14 @@ void UGeneContainerComponent::ActivateAllGenes()
     }
 }
 
-void UGeneContainerComponent::SetSlotSize(int size)
+void UGeneContainerComponent::SetSlotSize(int Size)
 {
-	if (SlotSize == size)
+	if (SlotSize == Size)
 	{
 		return;
 	}
 
-	SlotSize = size;
+	SlotSize = Size;
 	PushAndTruncateGenes(SlotSize);
 
 	Character->ContainerWidget->SetSlotCount(SlotSize);

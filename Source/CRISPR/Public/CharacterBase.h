@@ -30,5 +30,5 @@ public:
 
 public:
 	UPROPERTY(BlueprintReadWrite)
-	UGeneContainerWidgetBase* ContainerWidget;
+	TObjectPtr<UGeneContainerWidgetBase> ContainerWidget;
 };

@@ -29,8 +29,8 @@ public:
 
 public:
 	UPROPERTY(BlueprintReadOnly)
-	ACharacterBase* Character;
+	TObjectPtr<ACharacterBase> Character;
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-	const UGeneDataAsset* DataAsset;
+	TObjectPtr<const UGeneDataAsset> DataAsset;
 };

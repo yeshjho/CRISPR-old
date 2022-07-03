@@ -8,6 +8,7 @@
 #include "GeneContainerWidgetBase.h"
 #include "GeneDataAsset.h"
 #include "PassiveGene.h"
+#include "GameFramework/InputSettings.h"
 
 // Sets default values for this component's properties
 UGeneContainerComponent::UGeneContainerComponent()
@@ -26,9 +27,24 @@ void UGeneContainerComponent::BeginPlay()
 	Super::BeginPlay();
 
 	Character = dynamic_cast<ACharacterBase*>(GetOwner());
-
-	// ...
 	
+	int i = 0;
+	constexpr const char* defaultKeys[] = { "Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P" };
+	for (const char* c : defaultKeys)
+	{
+		FString str{ "Activate Slot " };
+		str.Append(FString::FromInt(i + 1));
+		const FName name{ *str };
+		const FKey key{ c };
+		if (!UInputSettings::GetInputSettings()->DoesActionExist(name))
+		{
+			UInputSettings::GetInputSettings()->AddActionMapping({ name, key });
+		}
+		
+		Character->InputComponent->BindAction<FKeyInputDelegate>(name, EInputEvent::IE_Pressed, this, &UGeneContainerComponent::OnKeyInput, i);
+
+	    i++;
+	}
 }
 
 
@@ -55,6 +71,11 @@ void UGeneContainerComponent::AddGene(const UGeneDataAsset* GeneData)
 	gene->Character = Character;
 	Genes.Emplace(SlotSize - GeneData->SlotCount, GeneData->SlotCount, gene);
 	gene->OnAdded();
+	if (SlotSize < GeneData->SlotCount)
+	{
+		Genes.RemoveAt(0);
+		gene->OnRemoved();
+	}
 
 	Character->ContainerWidget->SetGenes(Genes);
 }
@@ -71,9 +92,9 @@ void UGeneContainerComponent::ActivateAllGenes()
     }
 }
 
-void UGeneContainerComponent::SetSlotSize(int Size)
+void UGeneContainerComponent::SetSlotSize(const int Size)
 {
-	if (SlotSize == Size)
+	if (SlotSize == Size || Size < 0)
 	{
 		return;
 	}
@@ -85,13 +106,13 @@ void UGeneContainerComponent::SetSlotSize(int Size)
 	Character->ContainerWidget->SetGenes(Genes);
 }
 
-void UGeneContainerComponent::PushAndTruncateGenes(int lastGeneStartSlotIndex)
+void UGeneContainerComponent::PushAndTruncateGenes(int LastGeneStartSlotIndex)
 {
 	for (int i = Genes.Num() - 1; i >= 0; i--)
 	{
 		auto& info = Genes[i];
 		const int thisGeneEndSlotIndex = info.StartSlotIndex + info.SlotSize - 1;
-		const int overlapSize = thisGeneEndSlotIndex - lastGeneStartSlotIndex + 1;
+		const int overlapSize = thisGeneEndSlotIndex - LastGeneStartSlotIndex + 1;
 		if (overlapSize <= 0)
 		{
 			break;
@@ -106,7 +127,22 @@ void UGeneContainerComponent::PushAndTruncateGenes(int lastGeneStartSlotIndex)
 			Genes.RemoveAt(0, i + 1);
 			break;
 		}
-		lastGeneStartSlotIndex = info.StartSlotIndex;
+		LastGeneStartSlotIndex = info.StartSlotIndex;
 	}
+}
+
+void UGeneContainerComponent::OnKeyInput(const int SlotIndex)
+{
+    for (const auto& info : Genes)
+    {
+        if (info.StartSlotIndex <= SlotIndex && SlotIndex <= info.StartSlotIndex + info.SlotSize - 1)
+        {
+			if (auto* gene = dynamic_cast<UActiveGene*>(info.Gene))
+			{
+				gene->OnActivate();
+			}
+			break;
+        }
+    }
 }
 

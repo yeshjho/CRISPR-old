@@ -59,7 +59,11 @@ public:
 	void SetSlotSize(int Size);
 
 private:
-	void PushAndTruncateGenes(int lastGeneStartSlotIndex);
+	void PushAndTruncateGenes(int LastGeneStartSlotIndex);
+
+	void OnKeyInput(int SlotIndex);
+
+	DECLARE_DELEGATE_OneParam(FKeyInputDelegate, int)
 
 
 public:
@@ -70,5 +74,5 @@ public:
 	int SlotSize = 3;
 
 	UPROPERTY(BlueprintReadOnly)
-	ACharacterBase* Character;
+	TObjectPtr<ACharacterBase> Character;
 };

@@ -28,7 +28,7 @@ struct FGeneInfo
 	int SlotSize;
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-	UGene* Gene;
+	TObjectPtr<UGene> Gene;
 };
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )

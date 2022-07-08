@@ -6,6 +6,7 @@
 #include "Engine/DataAsset.h"
 #include "EnemyDataAsset.generated.h"
 
+class UGeneDataAsset;
 class AEnemyCharacterBase;
 /**
  * 
@@ -18,7 +19,7 @@ class CRISPR_API UEnemyDataAsset : public UDataAsset
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	FText Name;
-
+	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TSubclassOf<AEnemyCharacterBase> Character;
+	TObjectPtr<UGeneDataAsset> Gene;
 };

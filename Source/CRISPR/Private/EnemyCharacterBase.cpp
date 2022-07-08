@@ -15,7 +15,12 @@ AEnemyCharacterBase::AEnemyCharacterBase()
 void AEnemyCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	if (DataAsset.IsNull())
+	{
+		UE_LOG(LogActor, Error, TEXT("DataAsset is not set for actor %s"), *GetActorLabel());
+		GEngine->AddOnScreenDebugMessage(-1, FLT_MAX, FColor::Red, FString{ "DataAsset is not set for actor " } + *GetActorLabel());
+	}
 }
 
 // Called every frame

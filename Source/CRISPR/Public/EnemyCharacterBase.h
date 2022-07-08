@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "EnemyCharacterBase.generated.h"
 
+class UEnemyDataAsset;
 UCLASS(Abstract, BlueprintType)
 class CRISPR_API AEnemyCharacterBase : public ACharacter
 {
@@ -26,4 +27,8 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+
+public:
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TObjectPtr<const UEnemyDataAsset> DataAsset;
 };

@@ -137,7 +137,7 @@ void UGeneContainerComponent::OnKeyInput(const int SlotIndex)
     {
         if (info.StartSlotIndex <= SlotIndex && SlotIndex <= info.StartSlotIndex + info.SlotSize - 1)
         {
-			if (auto* gene = dynamic_cast<UActiveGene*>(info.Gene))
+			if (auto* gene = dynamic_cast<UActiveGene*>(info.Gene.Get()))
 			{
 				gene->OnActivate();
 			}

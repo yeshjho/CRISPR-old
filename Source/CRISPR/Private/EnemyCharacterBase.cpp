@@ -37,3 +37,13 @@ void AEnemyCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInput
 
 }
 
+void AEnemyCharacterBase::OnConstruction(const FTransform& Transform)
+{
+    Super::OnConstruction(Transform);
+
+    UE::Math::TVector<double> location = Transform.GetLocation();
+	location.Y = 0;
+
+	SetActorLocation(location);
+}
+

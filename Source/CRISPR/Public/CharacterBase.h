@@ -27,6 +27,8 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	virtual void OnConstruction(const FTransform& Transform) override;
+
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void OnDead();
 

@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "CharacterBase.generated.h"
 
+class UGeneDataAsset;
 class UGeneContainerWidgetBase;
 UCLASS(Blueprintable)
 class CRISPR_API ACharacterBase : public ACharacter
@@ -29,8 +30,11 @@ public:
 
 	virtual void OnConstruction(const FTransform& Transform) override;
 
+	UFUNCTION(BlueprintCallable)
+	void OnDead(const UGeneDataAsset* GeneData);
+
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
-	void OnDead();
+	void InnerOnDead();
 
 public:
 	UPROPERTY(BlueprintReadWrite)

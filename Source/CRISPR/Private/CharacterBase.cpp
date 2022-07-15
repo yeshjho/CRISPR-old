@@ -3,6 +3,8 @@
 
 #include "CharacterBase.h"
 
+#include "GeneContainerComponent.h"
+
 // Sets default values
 ACharacterBase::ACharacterBase()
 {
@@ -39,5 +41,11 @@ void ACharacterBase::OnConstruction(const FTransform& Transform)
 	location.Y = 0;
 
 	SetActorLocation(location);
+}
+
+void ACharacterBase::OnDead(const UGeneDataAsset* GeneData)
+{
+	static_cast<UGeneContainerComponent*>(GetComponentByClass(UGeneContainerComponent::StaticClass()))->AddGene(GeneData);
+	InnerOnDead();
 }
 

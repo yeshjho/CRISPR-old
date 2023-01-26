@@ -36,6 +36,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void InnerOnDead();
 
+	UFUNCTION(BlueprintCallable)
+	void RemoveComponentByClass(TSubclassOf<UActorComponent> ComponentClass);
+
 public:
 	UPROPERTY(BlueprintReadWrite)
 	TObjectPtr<UGeneContainerWidgetBase> ContainerWidget;

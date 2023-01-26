@@ -49,3 +49,11 @@ void ACharacterBase::OnDead(const UGeneDataAsset* GeneData)
 	InnerOnDead();
 }
 
+void ACharacterBase::RemoveComponentByClass(TSubclassOf<UActorComponent> ComponentClass)
+{
+    if (auto* component = GetComponentByClass(ComponentClass))
+    {
+		component->DestroyComponent();
+    }
+}
+
